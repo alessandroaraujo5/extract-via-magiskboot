@@ -1,8 +1,9 @@
 MagiskBoot - Boot Image Modification Tool
 
-Usage: ./magiskboot <action> [args...]
+Usage: `./magiskboot <action> [args...]`
 
 Supported actions:
+```
   unpack [-n] [-h] [--vendor] <bootimg>
     Unpack <bootimg> to its individual components, each component to
     a file with its corresponding file name in the current directory.
@@ -107,3 +108,4 @@ Supported actions:
     If [outfile] is not specified, then <infile> will be replaced
     with another file removing its archive format file extension.
     Supported formats: gzip zopfli xz lzma bzip2 lz4 lz4_legacy lz4_lg 
+```
