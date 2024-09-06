@@ -1,8 +1,8 @@
 #!/bin/bash
 
-SOURCE=$(pwd)
-UNPACK="unpack_root"
-RAMDISK="ramdisk_root"
+source=$(pwd)
+unpack="unpack_root"
+ramdisk="ramdisk_root"
 
 # Exit if $1 were not given
 if [[ -z "$1" ]]; then
@@ -19,17 +19,21 @@ fi
 # Clean up and create necessary directories
 echo "Cleaning up directories before we start..."
 sleep 2s
-rm -rf $SOURCE/$UNPACK; mkdir -p $SOURCE/$UNPACK
-rm -rf $SOURCE/$RAMDISK; mkdir -p $SOURCE/$RAMDISK
+rm -rf $source/$unpack; mkdir -p $source/$unpack
+rm -rf $source/$ramdisk; mkdir -p $source/$ramdisk
 
-# Unpack supplied .img file to $SOURCE/$UNPACK
-cd $SOURCE/$UNPACK
+# Unpack supplied .img file to $source/$unpack
+cd $source/$unpack
+echo " "
+echo "Magisk Modification Tool - Unpack Script"
+echo "by cd-Crypton"
+echo " "
 echo "Unpacking $1..."
 sleep 3s
-$SOURCE/bin/magiskboot unpack $SOURCE/$1 2>&1 | tee $SOURCE/$UNPACK/RAMDISK_INFO.txt
+$source/bin/magiskboot unpack $source/$1 2>&1 | tee $source/$unpack/RAMDISK_INFO.txt
 
 # Count CPIO archives.
-COUNT_CPIO=$(find "$SOURCE/$UNPACK" -type f -name "*.cpio" | wc -l)
+COUNT_CPIO=$(find "$source/$unpack" -type f -name "*.cpio" | wc -l)
 
 if [[ "$COUNT_CPIO" == "1" ]]; then
     echo "Detected a single ramdisk image!"
@@ -41,8 +45,12 @@ if [[ "$COUNT_CPIO" == "3" ]]; then
     cpio_n="vendor_ramdisk_recovery.cpio"
 fi
 
-# Extracting ramdisk into $SOURCE/$RAMDISK
-cd $SOURCE/$RAMDISK
-echo "Extracting recovery ramdisk..."
-$SOURCE/bin/magiskboot cpio $SOURCE/$UNPACK/$cpio_n extract
+# Extracting ramdisk into $source/$ramdisk
+cd $source/$ramdisk
+echo "Extracting $cpio_n..."
+$source/bin/magiskboot cpio $source/$unpack/$cpio_n extract 2>/dev/null
+echo " "
+echo "Check $unpack/ for unpacked $1."
+echo "Check $ramdisk/ for unpacked $cpio_n."
+echo " "
 
