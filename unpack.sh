@@ -26,7 +26,7 @@ rm -rf $SOURCE/$RAMDISK; mkdir -p $SOURCE/$RAMDISK
 cd $SOURCE/$UNPACK
 echo "Unpacking $1..."
 sleep 3s
-$SOURCE/magiskboot unpack $SOURCE/$1 2>&1 | tee $SOURCE/$UNPACK/RAMDISK_INFO.txt
+$SOURCE/bin/magiskboot unpack $SOURCE/$1 2>&1 | tee $SOURCE/$UNPACK/RAMDISK_INFO.txt
 
 # Count CPIO archives.
 COUNT_CPIO=$(find "$SOURCE/$UNPACK" -type f -name "*.cpio" | wc -l)
@@ -44,5 +44,5 @@ fi
 # Extracting ramdisk into $SOURCE/$RAMDISK
 cd $SOURCE/$RAMDISK
 echo "Extracting recovery ramdisk..."
-$SOURCE/magiskboot cpio $SOURCE/$UNPACK/$cpio_n extract
+$SOURCE/bin/magiskboot cpio $SOURCE/$UNPACK/$cpio_n extract
 
