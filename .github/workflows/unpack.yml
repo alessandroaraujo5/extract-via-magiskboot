@@ -1,0 +1,54 @@
+name: unpack
+
+on:
+  workflow_dispatch:
+    inputs:
+      IMAGE_LINK:
+        description: 'Image'
+        required: true
+        default: ''
+
+
+jobs:
+  build:
+    name: Dump by ${{ github.actor }}
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+    permissions:
+      contents: write
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      
+    - name: Cleanup
+      uses: rokibhasansagar/slimhub_actions@main
+      
+    - name: Set Swap Space
+      uses: pierotofy/set-swap-space@master
+      with:
+        swap-size-gb: 12
+
+    - name: Install Git
+      run: |
+        apt install git-all
+
+    - name: Setup Dump Environment
+      run: |
+        mkdir -p workspace && cd workspace
+        git clone --depth=1 https://github.com/SavedByLight/DumprX.git ./dumprx
+        cd dumprx && bash setup.sh
+        git clone --depth=1 https://github.com/SavedByLight/extract-via-magiskboot.git ./unpacker
+
+
+    - name: Image
+      run: |
+        cd workspace/dumprx
+        bash unpack.sh ${{ github.event.inputs.IMAGE_LINK }} ./out
+
+
+
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
